@@ -1,0 +1,97 @@
+// calculator.js
+
+const calculator = {
+  equation: '',
+
+  // Named function for addition
+  add: function(a, b) {
+    return a + b;
+  },
+
+  // Anonymous function for subtraction
+  subtract: function(a, b) {
+    return a - b;
+  },
+
+  // Arrow function for multiplication
+  multiply: (a, b) => a * b,
+
+  // Named function for division with zero check
+  divide: function(a, b) {
+    if (b === 0) {
+      alert("Cannot divide by zero!");
+      return 'Error';
+    }
+    return a / b;
+  },
+
+  updateEquation: function(value) {
+    this.equation += value;
+    document.getElementById('display').value = this.equation;
+  },
+
+  clearEquation: function() {
+    this.equation = '';
+    document.getElementById('display').value = '';
+  },
+
+  calculate: function() {
+    try {
+      // Extract operands and operator using regex
+      const regex = /(\d+)([\+\-\*\/])(\d+)/;
+      const match = this.equation.match(regex);
+
+      if (!match) {
+        alert("Invalid input");
+        return;
+      }
+
+      const num1 = parseFloat(match[1]);
+      const operator = match[2];
+      const num2 = parseFloat(match[3]);
+
+      let result;
+
+      switch (operator) {
+        case '+':
+          result = this.add(num1, num2);
+          break;
+        case '-':
+          result = this.subtract(num1, num2);
+          break;
+        case '*':
+          result = this.multiply(num1, num2);
+          break;
+        case '/':
+          result = this.divide(num1, num2);
+          break;
+      }
+
+      this.equation = result.toString();
+      document.getElementById('display').value = this.equation;
+    } catch (error) {
+      alert("Error in calculation");
+    }
+  }
+};
+
+// Add event listeners
+document.querySelectorAll('.number').forEach(button => {
+  button.addEventListener('click', function() {
+    calculator.updateEquation(this.textContent);
+  });
+});
+
+document.querySelectorAll('.operator').forEach(button => {
+  button.addEventListener('click', function() {
+    calculator.updateEquation(this.textContent);
+  });
+});
+
+document.getElementById('clear').addEventListener('click', function() {
+  calculator.clearEquation();
+});
+
+document.getElementById('equals').addEventListener('click', function() {
+  calculator.calculate();
+});
